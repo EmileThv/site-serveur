@@ -9,8 +9,8 @@ const modak = Modak({
 });
 
 export const metadata: Metadata = {
-  title: "CoubehFeu - Discord Games",
-  description: "Le portail officiel de Coubah Corp",
+  title: "CoubehFeu - Serv de l'apocalypse",
+  description: "gamersonly3",
 };
 
 export default function RootLayout({
