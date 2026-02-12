@@ -20,13 +20,13 @@ export default function Navbar() {
             {/* CENTRE : Navigation (Correction du centrage entre liens) */}
             <div className="hidden md:flex items-center justify-center flex-1">
                 <div className="flex items-center">
-                    <a href="/daily-games" className="flex items-center justify-center gap-2 hover:text-main-green transition font-bold text-lg w-45">
+                    <a href="/daily-games" className="flex items-center text-main-yellow  hover:text-main-green justify-center gap-2 transition font-bold text-lg w-45">
                         <Gamepad2 size={22} /> Daily Games
                     </a>
-                    <a href="#" className="flex items-center justify-center gap-2 hover:text-main-green transition font-bold text-lg w-30">
+                    <a href="#" className="flex items-center justify-center gap-2 text-main-yellow  hover:text-main-green transition font-bold text-lg w-30">
                         <Wallet size={22} /> Pari
                     </a>
-                    <button className="flex items-center justify-center gap-2 hover:text-main-green transition font-bold text-lg w-30 cursor-pointer">
+                    <button className="flex items-center justify-center gap-2 text-main-yellow  hover:text-main-green transition font-bold text-lg w-30 cursor-pointer">
                         <Menu size={22} /> Profils
                     </button>
                 </div>
