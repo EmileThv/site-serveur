@@ -34,12 +34,19 @@ export default function Navbar() {
 
             {/* DROITE : Login (On fixe aussi une largeur min) */}
             <div className="flex justify-end min-w-50">
-                {session ? (
-                    /* SI CONNECTÉ : On affiche l'avatar et un bouton déco */
-                    <div className="flex items-center gap-4">
+                {/* 1. On vérifie si c'est en train de charger */}
+                {session === undefined ? (
+                    <div className="h-10 w-10" /> 
+                ) : session ? (
+                    /* 2. SI CONNECTÉ */
+                    <div className="flex items-center gap-4 animate-in fade-in duration-300">
                         <div className="hidden sm:flex flex-col items-end">
-                            <span className="text-sm font-bold text-main-green drop-shadow-[0_0_5px_rgba(254,200,12,0.6)]">{session.user?.name}</span>
-                            <button onClick={() => signOut()} className="text-[10px] uppercase opacity-50 hover:opacity-100 transition">Déconnexion</button>
+                            <span className="text-md font-bold text-main-green drop-shadow-[0_0_5px_rgba(254,200,12,0.6)]">
+                                {session.user?.name}
+                            </span>
+                            <button onClick={() => signOut()} className="text-[10px] uppercase opacity-50 hover:opacity-100 transition">
+                                Déconnexion
+                            </button>
                         </div>
                         <img
                             src={session.user?.image || ""}
