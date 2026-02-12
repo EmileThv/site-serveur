@@ -2,16 +2,40 @@
 
 import { motion } from "framer-motion";
 import gamesData from "./games-data.json";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function GamesPage() {
-  const constraintsRef = useRef(null);
+  const [windowSize, setWindowSize] = useState({ w: 0, h: 0 });
+  // On crée un état pour stocker les positions aléatoires une seule fois au montage
+  const [positions, setPositions] = useState<{x: number, y: number}[]>([]);
 
-  // Fusion des données pour le mapping
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ w: window.innerWidth, h: window.innerHeight });
+    };
+    
+    handleResize();
+
+    // On génère les positions aléatoires
+    const totalBoxes = gamesData.dailyCategories.length + 1;
+    const randomPositions = Array.from({ length: totalBoxes }).map(() => ({
+      // On garde une marge de sécurité (ex: entre 50px et 60% de l'écran)
+      x: Math.floor(Math.random() * (window.innerWidth * 0.5)),
+      y: Math.floor(Math.random() * (window.innerHeight * 0.5))
+    }));
+    setPositions(randomPositions);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const allBoxes = [
     ...gamesData.dailyCategories.map(c => ({ ...c, isSpecial: false })),
     { nom: "Friendslop", isSpecial: true }
   ];
+
+  // On attend que les positions soient générées pour éviter un saut visuel
+  if (positions.length === 0) return <main className="h-screen bg-discord-dark" />;
 
   return (
     <main className="h-screen bg-discord-dark overflow-hidden relative">
@@ -21,23 +45,25 @@ export default function GamesPage() {
         </h1>
       </div>
 
-      <div ref={constraintsRef} className="absolute inset-0 p-8">
+      <div className="absolute inset-0">
         {allBoxes.map((cat: any, index) => (
           <motion.div
             key={cat.nom}
             drag
-            dragConstraints={constraintsRef}
-            dragTransition={{ 
-              power: 0.2, 
-              timeConstant: 200 
+            dragConstraints={{
+              top: 0,
+              left: 0,
+              right: windowSize.w > 0 ? windowSize.w - 400 : 0,
+              bottom: windowSize.h > 0 ? windowSize.h - 300 : 0
             }}
-            dragElastic={0.2}
+            dragTransition={{ power: 0.2, timeConstant: 200 }}
+            dragElastic={0.1}
+            // On utilise la position aléatoire stockée
             initial={{ 
-              x: 100 + (index * 60), 
-              y: 100 + (index * 40) 
+              x: positions[index]?.x ?? 100, 
+              y: positions[index]?.y ?? 100 
             }}
             whileDrag={{ scale: 1.05, zIndex: 50 }}
-            // On utilise md:w-100 comme demandé pour les boites normales
             className={`absolute p-6 rounded-2xl border-2 shadow-2xl cursor-grab active:cursor-grabbing touch-none
               ${cat.isSpecial 
                 ? "bg-main-yellow/5 border-main-yellow backdrop-blur-md w-80 md:w-100" 
@@ -56,6 +82,7 @@ export default function GamesPage() {
                     key={item.name} 
                     href={item.url} 
                     target="_blank"
+                    onPointerDown={(e) => e.stopPropagation()}
                     className="bg-white/10 px-3 py-1.5 rounded text-sm hover:bg-main-green hover:text-black transition-colors font-bold"
                   >
                     {item.name}
@@ -69,6 +96,7 @@ export default function GamesPage() {
                     key={jeu.name} 
                     href={jeu.url} 
                     target="_blank"
+                    onPointerDown={(e) => e.stopPropagation()}
                     className="text-gray-300 hover:text-white font-bold text-xl transition-colors flex items-center gap-2"
                   >
                     <span className="text-main-green text-xs">●</span>
