@@ -1,0 +1,89 @@
+{
+    "dailyCategories": [
+        {
+            "nom": "Normaux",
+            "jeux": [
+                {
+                    "name": "Wordle",
+                    "url": "https://www.nytimes.com/games/wordle/index.html"
+                },
+                {
+                    "name": "Strands",
+                    "url": "https://www.nytimes.com/games/strands"
+                },
+                {
+                    "name": "Cryptic crosswords",
+                    "url": "https://www.minutecryptic.com/"
+                },
+                {
+                    "name": "Timeguessr",
+                    "url": "https://timeguessr.com/"
+                }
+            ]
+        },
+        {
+            "nom": "Géographie",
+            "jeux": [
+                {
+                    "name": "Worldle",
+                    "url": "https://worldle.teuteuf.fr"
+                },
+                {
+                    "name": "Travle",
+                    "url": "https://travle.earth/"
+                },
+                {
+                    "name": "Globle",
+                    "url": "https://globle-game.com/"
+                },
+                {
+                    "name": "GeoGrid",
+                    "url": "https://www.geogridgame.com/"
+                },
+                {
+                    "name": "GeoConnections",
+                    "url": "https://geoconnections.net/"
+                }
+            ]
+        },
+        {
+            "nom": "Geek",
+            "jeux": [
+                {
+                    "name": "Gamedle",
+                    "url": "https://www.gamedle.wtf/"
+                },
+                {
+                    "name": "Loldle ( TW: League of Legends )",
+                    "url": "https://loldle.net/"
+                },
+                {
+                    "name": "Smashdle",
+                    "url": "https://smashdle.net/"
+                },
+                {
+                    "name": "Pokedle",
+                    "url": "https://pokedle.net/"
+                }
+            ]
+        }
+    ],
+    "friendslop": [
+        {
+            "name": "Geoguessr",
+            "url": "https://www.geoguessr.com/"
+        },
+        {
+            "name": "PopSauce/BombParty",
+            "url": "https://jklm.fun/"
+        },
+        {
+            "name": "Skribbl.io",
+            "url": "https://skribbl.io/"
+        },
+        {
+            "name": "Gartic Phone",
+            "url": "https://garticphone.com/fr/"
+        }
+    ]
+}

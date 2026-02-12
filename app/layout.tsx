@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Modak } from "next/font/google"; // On remplace Geist par Modak
+import localFont from "next/font/local"; // On utilise localFont au lieu de Google
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
-const modak = Modak({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-modak",
+// Configuration de la police locale
+const squidwod = localFont({
+  src: "../public/fonts/Squidwod.otf", // Vérifie bien le nom du fichier
+  variable: "--font-squidwod",
 });
 
 export const metadata: Metadata = {
-  title: "CoubehFeu - Serv de l'apocalypse",
-  description: "gamersonly3",
+  title: "SquidHub",
+  description: "Le portail officiel du Serveur de l'Apocalypse",
 };
 
 export default function RootLayout({
@@ -20,9 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body
-        className={`${modak.variable} antialiased`}
-      >
+      <body className={`${squidwod.variable} antialiased`}>
+        <Navbar />
         {children}
       </body>
     </html>

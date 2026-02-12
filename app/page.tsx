@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 export default function Home() {
   return (
     <main className="min-h-screen bg-discord-black text-white">
-      <Navbar />
       <section className="h-80 bg-[#CCCCCC] w-full relative flex justify-center">
         {/* Texte de la bannière */}
         <h2 className="mt-12 text-xl font-bold opacity-30 uppercase tracking-widest">Bannière</h2>

@@ -5,15 +5,20 @@ export default function Navbar() {
         <nav className="flex items-center justify-between px-6 py-4 bg-discord-black text-white border-b border-white/10">
 
             {/* GAUCHE : Logo & Nom (On fixe une largeur min pour aider le centrage du milieu) */}
-            <div className="flex items-center gap-2 min-w-50">
-                <div className="w-10 h-10 bg-discord-blurple rounded-full flex items-center justify-center font-bold">C</div>
-                <span className="font-(family-name:--font-modak) text-7xl hidden md:block">CoubehFeu</span>
-            </div>
+            {/* GAUCHE : Logo & Nom cliquables */}
+            <a href="/" className="flex items-center gap-2 min-w-50 cursor-pointer group">
+                <div className="w-10 h-10 bg-discord-blurple rounded-full flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+                    C
+                </div>
+                <span className="font-(family-name:--font-squidwod) text-[#22B04E] text-7xl hidden md:block drop-shadow-[0_0_15px_rgba(34,176,78,0.4)]">
+                    SquidHub
+                </span>
+            </a>
 
             {/* CENTRE : Navigation (Correction du centrage entre liens) */}
             <div className="hidden md:flex items-center justify-center flex-1">
                 <div className="flex items-center">
-                    <a href="#" className="flex items-center justify-center gap-2 hover:text-discord-blurple transition font-bold text-lg w-45">
+                    <a href="/daily-games" className="flex items-center justify-center gap-2 hover:text-discord-blurple transition font-bold text-lg w-45">
                         <Gamepad2 size={22} /> Daily Games
                     </a>
                     <a href="#" className="flex items-center justify-center gap-2 hover:text-discord-blurple transition font-bold text-lg w-30">
