@@ -5,11 +5,11 @@
             "jeux": [
                 {
                     "name": "Wordle",
-                    "url": "https://www.nytimes.com/games/wordle/index.html"
+                    "url": "https://www.nytimes.com/games/wordle/index.html/"
                 },
                 {
                     "name": "Strands",
-                    "url": "https://www.nytimes.com/games/strands"
+                    "url": "https://www.nytimes.com/games/strands/"
                 },
                 {
                     "name": "Cryptic crosswords",
@@ -26,7 +26,7 @@
             "jeux": [
                 {
                     "name": "Worldle",
-                    "url": "https://worldle.teuteuf.fr"
+                    "url": "https://worldle.teuteuf.fr/"
                 },
                 {
                     "name": "Travle",
@@ -35,6 +35,10 @@
                 {
                     "name": "Globle",
                     "url": "https://globle-game.com/"
+                },
+                {
+                    "name": "Globle Capitals",
+                    "url": "https://globle-capitals.com/game/"
                 },
                 {
                     "name": "GeoGrid",
@@ -84,6 +88,11 @@
         {
             "name": "Gartic Phone",
             "url": "https://garticphone.com/fr/"
+        },
+        {
+            "name": "Blind Test",
+            "url": "https://songtrivia2.io/fr/"
+
         }
     ]
 }

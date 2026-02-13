@@ -20,8 +20,8 @@ export default function GamesPage() {
     const totalBoxes = gamesData.dailyCategories.length + 1;
     const randomPositions = Array.from({ length: totalBoxes }).map(() => ({
       // On garde une marge de sécurité (ex: entre 50px et 60% de l'écran)
-      x: Math.floor(Math.random() * (window.innerWidth * 0.5)),
-      y: Math.floor(Math.random() * (window.innerHeight * 0.5))
+      x: Math.floor(Math.random() * (window.innerWidth * 0.7)),
+      y: Math.floor(Math.random() * (window.innerHeight * 0.7))
     }));
     setPositions(randomPositions);
 
@@ -38,7 +38,7 @@ export default function GamesPage() {
   if (positions.length === 0) return <main className="h-screen bg-discord-dark" />;
 
   return (
-    <main className="h-screen bg-discord-dark overflow-hidden relative">
+    <main className="h-dvh bg-discord-dark overflow-hidden relative">
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 select-none">
         <h1 className="font-(family-name:--font-squidwod) text-main-yellow text-[25vw] uppercase leading-none">
           Games
@@ -53,8 +53,8 @@ export default function GamesPage() {
             dragConstraints={{
               top: 0,
               left: 0,
-              right: windowSize.w > 0 ? windowSize.w - 400 : 0,
-              bottom: windowSize.h > 0 ? windowSize.h - 300 : 0
+              right: windowSize.w > 0 ? windowSize.w - 384 : 0,
+              bottom: windowSize.h > 0 ? windowSize.h - 320 : 0
             }}
             dragTransition={{ power: 0.2, timeConstant: 200 }}
             dragElastic={0.1}

@@ -1,55 +1,41 @@
-import Navbar from "../components/Navbar";
+import HeroBg from "@/components/HeroBg";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-discord-black text-white">
-      <section className="h-80 bg-[#CCCCCC] w-full relative flex justify-center">
-        {/* Texte de la bannière */}
-        <h2 className="mt-12 text-xl font-bold opacity-30 uppercase tracking-widest">Bannière</h2>
-
-        {/* LE LOGO (Plus grand et plus bas) */}
-        <div className="absolute -bottom-28 z-10">
-          <div className="w-56 h-64 bg-white border-4 border-black flex items-center justify-center shadow-2xl">
-            {/* Zone pour ton futur blason */}
-            <span className="text-black font-black text-2xl uppercase">Logo</span>
+    <main className="relative h-[100dvh] w-screen bg-discord-black text-white overflow-hidden flex flex-col">
+      
+      {/* 1. BANNIÈRE & LOGO */}
+      <section className="h-60 bg-main-green/10 w-full relative flex justify-center shrink-0 z-20">
+        <h2 className="mt-10 text-lg font-bold opacity-30 uppercase tracking-widest text-black">Bannière</h2>
+        
+        <div className="absolute -bottom-75 flex items-center justify-center gap-6">
+          <div className="w-72 h-96 bg-white border-4 border-black flex items-center justify-center shadow-2xl text-black font-black text-xl uppercase">
+            Logo
           </div>
         </div>
       </section>
-      {/* SECTION CONTENU (Fond sombre pour les yeux) */}
-      <section className="bg-discord-dark pt-32 pb-20 px-4 sm:px-12 min-h-150">
-        <div className="max-w-none mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
 
-          {/* Bloc Classement */}
-          <div className="bg-discord-black rounded-3xl h-80 w-full md:w-100 flex items-center justify-center border border-white/5 shadow-2xl">
-            <h3 className="text-xl font-black uppercase tracking-tighter text-white">Classement</h3>
+      {/* 2. SECTION CONTENU (Background + Cartes) */}
+      <section className="relative flex-1 flex items-center overflow-hidden">
+        
+        {/* On appelle le fond d'écran ici */}
+        <HeroBg />
+
+        {/* CONTENU : Écarté aux bords via justify-between */}
+        <div className="relative z-10 w-full px-6 md:px-16 lg:px-24 flex flex-col md:flex-row justify-between items-center gap-6">
+          
+          {/* Bloc Classement - Gauche */}
+          <div className="bg-discord-black/40 backdrop-blur-md rounded-3xl h-64 md:h-80 w-full md:w-100 flex items-center justify-center border border-white/10 shadow-2xl hover:border-main-green/50 transition-all group shrink-0">
+            <h3 className="text-xl font-black uppercase tracking-tighter text-white group-hover:scale-110 transition-transform">
+              Classement
+            </h3>
           </div>
 
-          {/* ZONE CENTRALE : Flèches + Futur Contenu */}
-          <div className="flex-1 flex items-center justify-center gap-10">
-            {/* Flèche Gauche */}
-            <button className="hover:scale-110 transition-transform cursor-pointer bg-discord-black p-4 rounded-full border border-white/10 text-white shadow-lg">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m15 18-6-6 6-6" />
-              </svg>
-            </button>
-
-            {/* ESPACE VIDE (C'est ici que ta liste défilante ira) */}
-            <div className="hidden lg:flex flex-col items-center opacity-20">
-              <div className="w-20 h-20 border-4 border-dashed border-white rounded-xl"></div>
-              <span className="text-white text-xs font-bold mt-2 uppercase">Liste</span>
-            </div>
-
-            {/* Flèche Droite */}
-            <button className="hover:scale-110 transition-transform cursor-pointer bg-discord-black p-4 rounded-full border border-white/10 text-white shadow-lg">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m9 18 6-6-6-6" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Bloc Film */}
-          <div className="bg-discord-black rounded-3xl h-80 w-full md:w-100 flex items-center justify-center border border-white/5 shadow-2xl">
-            <h3 className="text-xl font-black uppercase tracking-tighter text-white">Film</h3>
+          {/* Bloc Film - Droite */}
+          <div className="bg-discord-black/40 backdrop-blur-md rounded-3xl h-64 md:h-80 w-full md:w-100 flex items-center justify-center border border-white/10 shadow-2xl hover:border-main-green/50 transition-all group shrink-0">
+            <h3 className="text-xl font-black uppercase tracking-tighter text-white group-hover:scale-110 transition-transform">
+              Film
+            </h3>
           </div>
 
         </div>

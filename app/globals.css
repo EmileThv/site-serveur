@@ -12,4 +12,5 @@
 body {
   background-color: var(--color-discord-dark);
   color: white;
+  overflow: hidden;
 }

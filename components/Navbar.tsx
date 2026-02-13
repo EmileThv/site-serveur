@@ -19,9 +19,9 @@ export default function Navbar() {
             {/* CENTRE : Navigation - On affiche uniquement les icônes sur mobile */}
             <div className="flex items-center justify-center flex-1">
                 <div className="flex items-center gap-6 md:gap-0">
-                    <a href="/daily-games" className="flex items-center text-main-yellow hover:text-main-green justify-center gap-2 transition font-bold text-lg md:w-45">
+                    <a href="/games" className="flex items-center text-main-yellow hover:text-main-green justify-center gap-2 transition font-bold text-lg md:w-30">
                         <Gamepad2 size={24} /> 
-                        <span className="hidden md:inline">Daily Games</span>
+                        <span className="hidden md:inline">Jeux</span>
                     </a>
                     <a href="#" className="flex items-center justify-center gap-2 text-main-yellow hover:text-main-green transition font-bold text-lg md:w-30">
                         <Wallet size={24} /> 
