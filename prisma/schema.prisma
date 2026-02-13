@@ -1,0 +1,33 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  discordId String   @unique
+  name      String?
+  email     String?
+  image     String?
+  credits   Int      @default(5000)
+  
+  betsSent     Bet[] @relation("Sender")
+  betsReceived Bet[] @relation("Receiver")
+}
+
+model Bet {
+  id         String   @id @default(cuid())
+  amount     Int
+  title      String
+  status     String   @default("PENDING")
+  createdAt  DateTime @default(now())
+  
+  senderId   String
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+}

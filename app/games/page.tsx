@@ -53,8 +53,8 @@ export default function GamesPage() {
             dragConstraints={{
               top: 0,
               left: 0,
-              right: windowSize.w > 0 ? windowSize.w - 384 : 0,
-              bottom: windowSize.h > 0 ? windowSize.h - 320 : 0
+              right: windowSize.w > 0 ? windowSize.w - (windowSize.w < 768 ? 300 : 400) : 0,
+              bottom: windowSize.h > 0 ? windowSize.h - 250 : 0
             }}
             dragTransition={{ power: 0.2, timeConstant: 200 }}
             dragElastic={0.1}
@@ -83,7 +83,7 @@ export default function GamesPage() {
                     href={item.url} 
                     target="_blank"
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="bg-white/10 px-3 py-1.5 rounded text-sm hover:bg-main-green hover:text-black transition-colors font-bold"
+                    className="bg-white/10 px-3 py-1.5 rounded text-xs md:text-sm hover:bg-main-green hover:text-black transition-colors font-bold"
                   >
                     {item.name}
                   </a>
@@ -97,7 +97,7 @@ export default function GamesPage() {
                     href={jeu.url} 
                     target="_blank"
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="text-gray-300 hover:text-white font-bold text-xl transition-colors flex items-center gap-2"
+                    className="text-gray-300 hover:text-white font-bold text-sm md:text-xl transition-colors flex items-center gap-2"
                   >
                     <span className="text-main-green text-xs">●</span>
                     {jeu.name}

@@ -1,18 +1,18 @@
 // middleware.ts
-import { NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
-import type { NextRequest } from "next/server";
+import authConfig from "./auth.config";
+import NextAuth from "next-auth";
 
-export async function middleware(req: NextRequest) {
-  const session = await getToken({ req });
+const { auth } = NextAuth(authConfig);
 
-  if (!session && req.nextUrl.pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/", req.url));
+export default auth((req) => {
+  const isLoggedIn = !!req.auth;
+  const isDashboard = req.nextUrl.pathname.startsWith("/dashboard");
+
+  if (isDashboard && !isLoggedIn) {
+    return Response.redirect(new URL("/", req.nextUrl));
   }
-
-  return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: ["/dashboard/:path*"], 
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
