@@ -2,16 +2,16 @@ import HeroBg from "@/components/HeroBg";
 
 export default function Home() {
   return (
-    <main className="relative h-[100dvh] w-screen bg-discord-black text-white overflow-hidden flex flex-col">
+    <main className="relative h-dvh w-screen bg-discord-black text-white overflow-hidden flex flex-col">
       
       {/* 1. BANNIÈRE & LOGO */}
       <section className="h-60 bg-main-green/10 w-full relative flex justify-center shrink-0 z-20">
         <h2 className="mt-10 text-lg font-bold opacity-30 uppercase tracking-widest text-black">Bannière</h2>
         
         <div className="absolute -bottom-75 flex items-center justify-center gap-6">
-          <div className="w-72 h-96 bg-white border-4 border-black flex items-center justify-center shadow-2xl text-black font-black text-xl uppercase">
+          {/*<div className="w-72 h-96 bg-white border-4 border-black flex items-center justify-center shadow-2xl text-black font-black text-xl uppercase">
             Logo
-          </div>
+          </div> */}
         </div>
       </section>
 
