@@ -166,7 +166,7 @@ export default function BettingPage() {
         >
             {/* BIG DYNAMIC BACKGROUND TEXT */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
-                <h1 className={`text-[30vw] font-(family-name:--font-squidwod) font-black tracking-tighter transition-colors duration-700 opacity-10 select-none ${isPathComplete() ? 'text-main-yellow' : 'text-main-green'}`}>
+                <h1 className={`text-[30vw] font-(family-name:--font-squidwod) font-black tracking-tighter transition-colors duration-700 opacity-10 select-none ${isPathComplete() ? 'text-main-yellow drop-shadow-[0_0_15px_rgba(254,200,12,0.6)]' : 'text-main-green'}`}>
                     GAMBLING
                 </h1>
             </div>
@@ -418,7 +418,7 @@ export default function BettingPage() {
 
 function Module({ title, children }: { title: string; children: React.ReactNode }) {
     return (
-        <div className="bg-[#121212]/15 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl relative w-full">
+        <div className="bg-[#121212]/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl relative w-full">
             <h3 className="text-[10px] font-black text-white/30 mb-6 uppercase tracking-[0.2em]">{title}</h3>
             {children}
         </div>
