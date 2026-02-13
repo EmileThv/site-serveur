@@ -1,23 +1,25 @@
-// app/api/users/route.ts
-import { prisma } from "@/prisma/client";
+import { kv } from "@vercel/kv";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
 export async function GET() {
   const session = await auth();
-  
-  // On récupère tout le monde SAUF l'utilisateur connecté (on ne parie pas contre soi-même)
-  const users = await prisma.user.findMany({
-    where: {
-      NOT: { id: session?.user?.id }
-    },
-    select: {
-      id: true,
-      name: true,
-      image: true,
-    },
-    take: 10 // Pour pas exploser ta grille de 10 prises
-  });
+  const myId = session?.user?.id;
 
-  return NextResponse.json(users);
+  // 1. On récupère la liste des IDs des joueurs enregistrés
+  const allUserIds = await kv.smembers("all_players");
+
+  // 2. On récupère les infos de chaque profil en parallèle
+  const users = await Promise.all(
+    allUserIds
+      .filter((id) => id !== myId) // On s'exclut de la liste
+      .slice(0, 10)               // On limite à 10 pour ta grille
+      .map(async (id) => {
+        const profile = await kv.get(`user:profile:${id}`);
+        return profile || null;
+      })
+  );
+
+  // On filtre les profils qui pourraient être corrompus/vides
+  return NextResponse.json(users.filter(u => u !== null));
 }

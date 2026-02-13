@@ -1,18 +1,7 @@
 // middleware.ts
-import authConfig from "./auth.config";
-import NextAuth from "next-auth";
-
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isDashboard = req.nextUrl.pathname.startsWith("/dashboard");
-
-  if (isDashboard && !isLoggedIn) {
-    return Response.redirect(new URL("/", req.nextUrl));
-  }
-});
+export { auth as middleware } from "@/auth"
 
 export const config = {
+  // On protège les pages sensibles, mais on laisse l'API et les assets libres
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};
+}

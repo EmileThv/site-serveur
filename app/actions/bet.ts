@@ -1,43 +1,46 @@
 "use server"
 
-import { prisma } from "@/prisma/client";
+import { kv } from "@vercel/kv";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
 export async function createBet(receiverId: string, amount: number, title: string) {
   const session = await auth();
+  
+  // 1. Vérification Auth
   if (!session?.user?.id) throw new Error("AUTH_REQUIRED");
-
-  // On récupère l'ID Prisma (ou DiscordId selon ton schéma)
   const senderId = session.user.id;
 
-  // Sécurité : Pas de pari contre soi-même (même si ton UI l'empêche)
+  // 2. Sécurité : Pas de pari contre soi-même
   if (senderId === receiverId) throw new Error("SELF_BET_PROHIBITED");
 
-  return await prisma.$transaction(async (tx) => {
-    const sender = await tx.user.findUnique({ where: { id: senderId } });
-    
-    if (!sender || sender.credits < amount) {
-      throw new Error("INSUFFICIENT_CREDITS");
-    }
+  // 3. Récupération des crédits (KV GET)
+  const senderCredits = await kv.get<number>(`user:credits:${senderId}`);
+  
+  if (senderCredits === null || senderCredits < amount) {
+    throw new Error("INSUFFICIENT_CREDITS");
+  }
 
-    // On bloque les crédits immédiatement
-    await tx.user.update({
-      where: { id: senderId },
-      data: { credits: { decrement: amount } }
-    });
+  // 4. Mise à jour des crédits (KV SET)
+  const newBalance = senderCredits - amount;
+  await kv.set(`user:credits:${senderId}`, newBalance);
 
-    const newBet = await tx.bet.create({
-      data: {
-        amount,
-        title: title || "UNNAMED_TRANSACTION",
-        senderId,
-        receiverId,
-        status: "PENDING"
-      }
-    });
+  // 5. Création du pari (On le stocke dans une liste pour l'historique)
+  const betData = {
+    id: `bet_${Math.random().toString(36).substr(2, 9)}`,
+    amount,
+    title: title || "UNNAMED_TRANSACTION",
+    senderId,
+    receiverId,
+    status: "PENDING",
+    createdAt: Date.now(),
+  };
 
-    revalidatePath("/bets"); // Rafraîchit les données du client
-    return newBet;
-  });
+  // On ajoute le pari à la liste du parieur ET du receveur
+  await kv.lpush(`user:bets:${senderId}`, JSON.stringify(betData));
+  await kv.lpush(`user:bets:${receiverId}`, JSON.stringify(betData));
+
+  revalidatePath("/bets");
+  
+  return { success: true, newBalance };
 }

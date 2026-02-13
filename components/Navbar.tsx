@@ -4,7 +4,7 @@ import { Menu, Wallet, Gamepad2 } from 'lucide-react';
 import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Navbar() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     return (
         <nav className="flex items-center justify-between px-4 md:px-6 py-4 bg-discord-black text-white border-b border-white/10">
@@ -20,16 +20,16 @@ export default function Navbar() {
             <div className="flex items-center justify-center flex-1">
                 <div className="flex items-center gap-6 md:gap-0">
                     <a href="/games" className="flex items-center text-main-yellow hover:text-main-green justify-center gap-2 transition font-bold text-lg md:w-30">
-                        <Gamepad2 size={24} /> 
+                        <Gamepad2 size={24} />
                         <span className="hidden md:inline">Jeux</span>
                     </a>
                     <a href="/bets" className="flex items-center justify-center gap-2 text-main-yellow hover:text-main-green transition font-bold text-lg md:w-30">
-                        <Wallet size={24} /> 
+                        <Wallet size={24} />
                         <span className="hidden md:inline">Pari</span>
                     </a>
                     {/* TODO: implement profiles */}
                     <button className="flex items-center justify-center gap-2 text-main-yellow hover:text-main-green transition font-bold text-lg md:w-30 cursor-pointer">
-                        <Menu size={24} /> 
+                        <Menu size={24} />
                         <span className="hidden md:inline">Profils</span>
                     </button>
                 </div>
@@ -37,15 +37,19 @@ export default function Navbar() {
 
             {/* DROITE : Login - Plus compact sur mobile */}
             <div className="flex justify-end min-w-fit md:min-w-50">
-                {session === undefined ? (
-                    <div className="h-10 w-10" /> 
+                {status === "loading" ? (
+                    /* Squelette de chargement pour éviter le saut visuel */
+                    <div className="h-10 w-10 rounded-full bg-white/5 animate-pulse" />
                 ) : session ? (
                     <div className="flex items-center gap-3 animate-in fade-in duration-300">
                         <div className="hidden sm:flex flex-col items-end">
                             <span className="text-md font-bold text-main-green">
                                 {session.user?.name}
                             </span>
-                            <button onClick={() => signOut()} className="text-[10px] uppercase opacity-50 hover:opacity-100 transition">
+                            <button
+                                onClick={() => signOut()}
+                                className="text-[10px] uppercase opacity-50 hover:opacity-100 transition cursor-pointer"
+                            >
                                 Déconnexion
                             </button>
                         </div>
