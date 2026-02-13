@@ -11,7 +11,9 @@ const LOCAL_IMAGES = [
   "/images/tanguypistolet.jpg",
   "/images/chat.png"
 ];
-
+// TODO: Ajouter plus d'images
+// TODO: Figure out the cropping
+// TODO: fine tune the transition
 export default function HeroBg() {
   // On initialise avec un index au hasard pour que chaque visite soit unique
   const [index, setIndex] = useState(0);

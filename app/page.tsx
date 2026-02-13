@@ -23,14 +23,14 @@ export default function Home() {
 
         {/* CONTENU : Écarté aux bords via justify-between */}
         <div className="relative z-10 w-full px-6 md:px-16 lg:px-24 flex flex-col md:flex-row justify-between items-center gap-6">
-          
+          {/* TODO: implement classement */}
           {/* Bloc Classement - Gauche */}
           <div className="bg-discord-black/40 backdrop-blur-md rounded-3xl h-64 md:h-80 w-full md:w-100 flex items-center justify-center border border-white/10 shadow-2xl hover:border-main-green/50 transition-all group shrink-0">
             <h3 className="text-xl font-black uppercase tracking-tighter text-white group-hover:scale-110 transition-transform">
               Classement
             </h3>
           </div>
-
+          {/* TODO: implement film */}
           {/* Bloc Film - Droite */}
           <div className="bg-discord-black/40 backdrop-blur-md rounded-3xl h-64 md:h-80 w-full md:w-100 flex items-center justify-center border border-white/10 shadow-2xl hover:border-main-green/50 transition-all group shrink-0">
             <h3 className="text-xl font-black uppercase tracking-tighter text-white group-hover:scale-110 transition-transform">

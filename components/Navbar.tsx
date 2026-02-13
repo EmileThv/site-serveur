@@ -23,10 +23,12 @@ export default function Navbar() {
                         <Gamepad2 size={24} /> 
                         <span className="hidden md:inline">Jeux</span>
                     </a>
+                    {/* TODO: implement betting */}
                     <a href="#" className="flex items-center justify-center gap-2 text-main-yellow hover:text-main-green transition font-bold text-lg md:w-30">
                         <Wallet size={24} /> 
                         <span className="hidden md:inline">Pari</span>
                     </a>
+                    {/* TODO: implement profiles */}
                     <button className="flex items-center justify-center gap-2 text-main-yellow hover:text-main-green transition font-bold text-lg md:w-30 cursor-pointer">
                         <Menu size={24} /> 
                         <span className="hidden md:inline">Profils</span>
