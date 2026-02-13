@@ -18,6 +18,18 @@
                 {
                     "name": "Timeguessr",
                     "url": "https://timeguessr.com/"
+                },
+                {
+                    "name": "Connections",
+                    "url": "https://www.nytimes.com/games/connections"
+                },
+                {
+                    "name": "Cémantix",
+                    "url": "https://cemantix.certitudes.org/"
+                },
+                {
+                    "name": "Pédantix",
+                    "url": "https://pedantix.certitudes.org/"
                 }
             ]
         },
@@ -34,7 +46,7 @@
                 },
                 {
                     "name": "Globle",
-                    "url": "https://globle-game.com/"
+                    "url": "https://globle-game.com/game/"
                 },
                 {
                     "name": "Globle Capitals",
@@ -54,6 +66,10 @@
             "nom": "Geek",
             "jeux": [
                 {
+                    "name": "Metazooa ( animaux )",
+                    "url": "https://metazooa.com/play/game"
+                },
+                {
                     "name": "Gamedle",
                     "url": "https://www.gamedle.wtf/"
                 },
@@ -68,6 +84,10 @@
                 {
                     "name": "Pokedle",
                     "url": "https://pokedle.net/"
+                },
+                {
+                    "name": "OnePiecedle",
+                    "url": "https://onepiecedle.net/"
                 }
             ]
         }
@@ -92,7 +112,14 @@
         {
             "name": "Blind Test",
             "url": "https://songtrivia2.io/fr/"
-
+        },
+        {
+            "name": "The Last Show",
+            "url": "https://lastshow.gg/"
+        },
+        {
+            "name": "Death By AI",
+            "url": "https://deathbyai.gg/"
         }
     ]
 }
