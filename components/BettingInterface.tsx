@@ -51,6 +51,7 @@ export default function BettingInterface({ session }: { session: any }) {
     const [players, setPlayers] = useState<Player[]>([]);
     const [status, setStatus] = useState("loading");
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -212,10 +213,27 @@ export default function BettingInterface({ session }: { session: any }) {
     };
 
     const drawCable = (start: Point, end: Point) => {
-        if (!start || !end) return "";
-        const sag = Math.abs(start.x - end.x) * 0.2 + 150;
-        return `M ${start.x} ${start.y} C ${start.x} ${start.y + sag}, ${end.x} ${end.y + sag}, ${end.x} ${end.y}`;
-    };
+    if (!start || !end) return "";
+
+    // The vertical distance between the two points
+    const deltaY = Math.abs(start.y - end.y);
+    // The horizontal distance
+    const deltaX = Math.abs(start.x - end.x);
+    
+    // Calculate a dynamic "sag" or tension
+    // If points are close, sag is small. If far, sag increases.
+    const sag = Math.min(deltaY, 100) + (deltaX * 0.2);
+
+    // Control Point 1: Slightly below the start point
+    const cp1x = start.x;
+    const cp1y = start.y + sag;
+
+    // Control Point 2: Slightly below the end point
+    const cp2x = end.x;
+    const cp2y = end.y + sag;
+
+    return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${end.x} ${end.y}`;
+};
 
 
     return (
@@ -382,6 +400,7 @@ export default function BettingInterface({ session }: { session: any }) {
                             <div className="w-16 h-40 bg-black/60 rounded-xl p-2 border border-white/10 relative shadow-inner">
                                 <motion.div
                                     drag="y"
+                                    dragSnapToOrigin
                                     dragConstraints={{ top: 0, bottom: 104 }}
                                     dragElastic={0}
                                     onDragEnd={handleLeverRelease}
@@ -431,6 +450,8 @@ export default function BettingInterface({ session }: { session: any }) {
                             // Only apply the expensive filter if the wire is live
                             filter={isLive ? "url(#glow)" : undefined}
                             stroke={isLive ? "#F2C80C" : "#22B04E"}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             strokeWidth={isLive ? 6 : 4}
                             animate={{
                                 stroke: isLive ? "#F2C80C" : "#22B04E",
@@ -449,6 +470,7 @@ export default function BettingInterface({ session }: { session: any }) {
                         strokeDasharray="10 5"
                         fill="none"
                         className="opacity-70"
+                        strokeLinecap="round"
                     />
                 )}
             </svg>
@@ -466,7 +488,7 @@ export default function BettingInterface({ session }: { session: any }) {
                             className="md:w-100 border-2 border-main-yellow bg-[#050505] p-8 rounded-lg shadow-[0_0_50px_rgba(242,200,12,0.15)] text-center relative"
                         >
                             {/* Titre du Pari */}
-                            <h2 className="text-main-yellow font-(family-name:--font-squidwod) text-6xl mb-6 tracking-wide uppercase">
+                            <h2 className="text-main-yellow font-(family-name:--font-squidwod) text-6xl mb-6 tracking-widest uppercase">
                                 {betTitle || "DEMO_BET"}
                             </h2>
 
@@ -498,14 +520,26 @@ export default function BettingInterface({ session }: { session: any }) {
                                     DECLINE
                                 </button>
                                 <button
+                                    disabled={isSubmitting}
                                     onClick={async () => {
                                         const conn = connections.find(c => c.to === "trans-in-b");
                                         if (conn) {
-                                            await createBet(conn.from, betAmount, betTitle);
-                                            setShowConfirmation(false);
-                                            setConnections([]); // Reset après succès
-                                            setIsSubmitted(true);
-                                            setTimeout(() => setIsSubmitted(false), 3000);
+                                            setIsSubmitting(true); // Start loading
+                                            try {
+                                                // For your SELF-TEST: 
+                                                // You can temporarily change conn.from to "YOUR_DISCORD_ID" 
+                                                // to force it to DM you regardless of who you clicked.
+                                                await createBet(conn.from, betAmount, betTitle);
+
+                                                setShowConfirmation(false);
+                                                setConnections([]);
+                                                setIsSubmitted(true);
+                                                setTimeout(() => setIsSubmitted(false), 3000);
+                                            } catch (err) {
+                                                console.error("Bet failed:", err);
+                                            } finally {
+                                                setIsSubmitting(false); // Stop loading
+                                            }
                                         }
                                     }}
                                     className="flex-1 py-4 bg-main-yellow text-black hover:bg-yellow-400 transition-colors font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(242,200,12,0.3)]"

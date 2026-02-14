@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
+import ActiveBetsOverlay from "@/components/ActiveBetsOverlay";
 
 // Configuration de la police locale
 const squidwod = localFont({
@@ -26,6 +27,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
+          <ActiveBetsOverlay />
         </Providers>
       </body>
     </html>
