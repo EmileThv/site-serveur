@@ -2,6 +2,13 @@ import NextAuth from "next-auth";
 import Discord from "next-auth/providers/discord";
 import { kv } from "@vercel/kv";
 
+type DiscordProfile = {
+  id: string;
+  username: string;
+  global_name?: string;
+  avatar?: string;
+};
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   trustHost: true,
@@ -25,7 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const TARGET_GUILD_ID = process.env.DISCORD_GUILD_ID;
       if (!TARGET_GUILD_ID) {
         console.warn("SIGNIN_WARN: DISCORD_GUILD_ID not set, allowing login");
-        return true; 
+        return true;
       }
 
       try {
@@ -63,13 +70,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
 
-    async jwt({ token, account }) {
-      if (account) {
-        token.sub = account.providerAccountId;
-        // Store the access token in the JWT so it's available for the signIn callback
-        token.accessToken = account.access_token;
+
+    async jwt({ token, account, profile }) {
+      if (account && profile) {
+        const discordProfile = profile as DiscordProfile;
+
+        token.discordId = discordProfile.id;
+        token.name = discordProfile.global_name ?? discordProfile.username;
       }
+
       return token;
     }
+
   },
 });

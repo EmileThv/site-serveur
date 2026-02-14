@@ -379,7 +379,6 @@ export default function BettingInterface({ session }: { session: any }) {
                                             {player.name}
                                         </span>
 
-                                        {/* La prise utilise maintenant l'ID PRISMA unique */}
                                         <Jack
                                             id={player.id}
                                             onRegistered={collectPort}
