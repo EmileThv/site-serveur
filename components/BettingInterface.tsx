@@ -328,11 +328,11 @@
                                     <div className="flex justify-around w-full px-4 border-t border-white/5 pt-4">
                                         <div className="flex flex-col items-center gap-1">
                                             <Jack id="trans-in-a" onRegistered={collectPort} onClick={handleJackClick} active={activeCable?.from === "trans-in-a"} />
-                                            <span className="text-[8px] font-black text-white/30 uppercase">In_A</span>
+                                            <span className="text-[8px] font-black text-white/30 uppercase">In_SELF</span>
                                         </div>
                                         <div className="flex flex-col items-center gap-1">
                                             <Jack id="trans-in-b" onRegistered={collectPort} onClick={handleJackClick} active={activeCable?.from === "trans-in-b"} />
-                                            <span className="text-[8px] font-black text-white/30 uppercase">In_B</span>
+                                            <span className="text-[8px] font-black text-white/30 uppercase">In_OPP</span>
                                         </div>
                                     </div>
                                 </div>
@@ -520,7 +520,7 @@
                                         }}
                                         className="flex-1 py-4 border border-white/10 hover:bg-white/5 transition-colors font-black text-[10px] uppercase tracking-[0.2em]"
                                     >
-                                        DECLINE
+                                        ANNULER
                                     </button>
 
                                     {/* REPLACE THIS WHOLE CONFIRM BUTTON */}
@@ -574,7 +574,7 @@
                                         <div className="flex items-center justify-center gap-2">
                                             {isSubmitting && <Spinner size={14} color="#111" />}
                                             <span>
-                                                {isSuccess ? "SENT" : isSubmitting ? "SENDING…" : "CONFIRM"}
+                                                {isSuccess ? "ENVOYÉ" : isSubmitting ? "ENVOI EN COURS..." : "CONFIRMER"}
                                             </span>
                                         </div>
 

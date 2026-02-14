@@ -85,8 +85,8 @@ export default function ActiveBetsOverlay() {
                         <div className="mt-4">
                             {resolvingBet === bet.id ? (
                                 <div className="flex flex-col gap-2">
-                                    <p className="text-[8px] text-main-yellow text-center font-black animate-pulse tracking-[0.2em]">
-                                        Qui a gagné ?
+                                    <p className="text-[12px] text-main-yellow text-center font-mono font-black animate-pulse tracking-[0.2em]">
+                                        QUI GAGNE ?
                                     </p>
                                     <div className="flex gap-2">
                                         <button
@@ -115,7 +115,7 @@ export default function ActiveBetsOverlay() {
                                     className="w-full bg-white/5 border border-white/10 text-white text-[9px] font-black py-2 rounded uppercase hover:bg-main-yellow hover:text-black transition-all group flex items-center justify-center gap-2"
                                 >
                                     <span className="w-1.5 h-1.5 bg-main-yellow rounded-full animate-ping group-hover:bg-black" />
-                                    Pari terminé
+                                    Terminer le pari
                                 </button>
                             )}
                         </div>
