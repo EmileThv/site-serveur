@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { initiateResolution } from "@/app/actions/resolve-bet";
+import { useCredits } from "@/app/providers/CreditsProvider";
 
 // Petite fonction pour dire à SWR comment récupérer les données
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function ActiveBetsOverlay() {
+    const { credits } = useCredits();
     const { data: session } = useSession();
     const [resolvingBet, setResolvingBet] = useState<string | null>(null);
 
@@ -52,7 +54,7 @@ export default function ActiveBetsOverlay() {
                         {/* --- ACTUAL BET CONTENT --- */}
                         <div className="flex justify-between items-start mb-1">
                             <span className="text-[10px] text-main-yellow font-black uppercase tracking-tighter">
-                                Active_Contract
+                                Pari Actif
                             </span>
                             <span className="text-[10px] text-white/30 font-mono">
                                 #{bet.id.slice(-4)}

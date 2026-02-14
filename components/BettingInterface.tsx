@@ -4,6 +4,7 @@ import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { signIn } from "next-auth/react";
 import { createBet } from "@/app/actions/bet";
+import { useCredits } from "@/app/providers/CreditsProvider";
 
 // Types
 interface Point {
@@ -52,9 +53,8 @@ export default function BettingInterface({ session }: { session: any }) {
     const [status, setStatus] = useState("loading");
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const [isSuccess, setIsSuccess] = useState(false); // NEW
-
+    const [isSuccess, setIsSuccess] = useState(false);
+    const {credits} = useCredits(); 
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -293,7 +293,7 @@ export default function BettingInterface({ session }: { session: any }) {
                                 <p className="text-xs text-main-green font-bold tracking-tighter italic truncate max-w-30">
                                     {session?.user?.name || "GUEST_USER"}
                                 </p>
-                                <p className="text-sm text-white font-black">5000 CR</p>
+                                <p className="text-sm text-white font-black">{credits?.toLocaleString() || "0"} CR</p>
                             </div>
                         </div>
                     </Module>

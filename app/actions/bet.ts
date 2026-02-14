@@ -41,7 +41,7 @@ export async function createBet(receiverId: string, amount: number, title: strin
     // Inside your createBet function in bet.ts
     await sendDiscordBetRequest({
       receiverId,
-      senderId: session.user.id, // <--- PASS IT HERE
+      senderId: session.user.id,
       senderName: session.user.name || "Un utilisateur",
       amount,
       title: title || "DEMO_BET",
@@ -53,7 +53,5 @@ export async function createBet(receiverId: string, amount: number, title: strin
 
   } catch (e) {
     console.error("DEBUG_BET_ERROR:", e);
-    // On renvoie quand même true pour que l'overlay s'affiche pendant ta démo !
-    return { success: true };
   }
 }

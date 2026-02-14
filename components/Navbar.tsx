@@ -4,18 +4,21 @@ import { Menu, Wallet, Gamepad2 } from 'lucide-react';
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
+import { useCredits } from "@/app/providers/CreditsProvider";
+
+
 export default function Navbar() {
     const { data: session, status } = useSession();
-
+    const { credits } = useCredits();
     return (
         <nav className="flex items-center justify-between px-4 md:px-6 py-4 bg-discord-black text-white border-b border-white/10">
 
             {/* GAUCHE : Logo PNG - On vire le texte SquidHub */}
             <a href="/" className="flex items-center min-w-fit md:w-100 cursor-pointer group">
                 <div className="relative h-10 w-32 md:h-14 md:w-48 drop-shadow-[0_0_15px_rgba(34,176,78,0.4)] transition-transform group-hover:scale-105">
-                    <Image 
-                        src="/images/logo_site.png" 
-                        alt="SquidHub Logo" 
+                    <Image
+                        src="/images/logo_site.png"
+                        alt="SquidHub Logo"
                         fill
                         className="object-contain object-left"
                         priority
@@ -52,7 +55,7 @@ export default function Navbar() {
                             <span className="text-[10px] font-bold text-main-yellow uppercase tracking-widest opacity-70">Solde</span>
                             <span className="text-main-green font-mono font-bold text-lg leading-none">
                                 {/* @ts-ignore */}
-                                {session.user?.credits?.toLocaleString() || "0"} <span className="text-[10px] ml-0.5">CR</span>
+                                {credits?.toLocaleString() || "0"} <span className="text-[10px] ml-0.5">CR</span>
                             </span>
                         </div>
 

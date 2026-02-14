@@ -147,6 +147,7 @@ export async function POST(req: Request) {
         if (action === "accept") {
           // debit the receiver
           await kv.decrby(`user:credits:${receiverId}`, bet.amount);
+          await kv.incrby(`user:credits:${senderId}`, bet.amount); 
           bet.status = "ACTIVE";
 
           // Update sender's stored list
