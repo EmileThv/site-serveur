@@ -61,11 +61,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     async session({ session, token }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-        const credits = await kv.get<number>(`user:credits:${token.sub}`);
-        // @ts-ignore
-        session.user.credits = credits ?? 5000;
+      if (token.discordId && session.user) {
+        session.user.id = token.discordId as string;
       }
       return session;
     },
