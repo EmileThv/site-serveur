@@ -1,6 +1,6 @@
 "use server";
 import { kv } from "@vercel/kv";
-import { sendDiscordResolutionRequest } from "@/lib/discord"; // On va créer ça
+import { sendDiscordResolutionRequest } from "@/lib/discord"; 
 
 
 async function updateBetInKV(userId: string, betId: string, updatedData: any) {

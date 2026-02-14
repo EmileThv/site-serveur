@@ -4,13 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { initiateResolution } from "@/app/actions/resolve-bet";
-import { useCredits } from "@/app/providers/CreditsProvider";
 
 // Petite fonction pour dire à SWR comment récupérer les données
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function ActiveBetsOverlay() {
-    const { credits } = useCredits();
     const { data: session } = useSession();
     const [resolvingBet, setResolvingBet] = useState<string | null>(null);
 
@@ -49,7 +47,7 @@ export default function ActiveBetsOverlay() {
                         initial={{ x: -100, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -100, opacity: 0 }}
-                        className="pointer-events-auto bg-[#050505] border-l-4 border-main-yellow p-4 rounded-r-lg shadow-[10px_10px_30px_rgba(0,0,0,0.5)] border border-white/5 min-w-[280px]"
+                        className="pointer-events-auto bg-[#050505] border-l-4 border-main-yellow p-4 rounded-r-lg shadow-[10px_10px_30px_rgba(0,0,0,0.5)] border min-w-[280px]"
                     >
                         {/* --- ACTUAL BET CONTENT --- */}
                         <div className="flex justify-between items-start mb-1">
@@ -76,7 +74,7 @@ export default function ActiveBetsOverlay() {
                             <div className="h-6 w-[1px] bg-white/10" />
 
                             <div className="flex flex-col">
-                                <span className="text-[8px] text-white/40 uppercase font-bold">Target</span>
+                                <span className="text-[8px] text-white/40 uppercase font-bold">Adversaire</span>
                                 <span className="text-sm font-black text-red-500 uppercase truncate max-w-[120px]">
                                     {bet.senderId === session?.user?.id ? bet.receiverName : bet.senderName}
                                 </span>
@@ -88,7 +86,7 @@ export default function ActiveBetsOverlay() {
                             {resolvingBet === bet.id ? (
                                 <div className="flex flex-col gap-2">
                                     <p className="text-[8px] text-main-yellow text-center font-black animate-pulse tracking-[0.2em]">
-                                        CONFIRM_WINNER_IDENTITY
+                                        Qui a gagné ?
                                     </p>
                                     <div className="flex gap-2">
                                         <button
@@ -117,7 +115,7 @@ export default function ActiveBetsOverlay() {
                                     className="w-full bg-white/5 border border-white/10 text-white text-[9px] font-black py-2 rounded uppercase hover:bg-main-yellow hover:text-black transition-all group flex items-center justify-center gap-2"
                                 >
                                     <span className="w-1.5 h-1.5 bg-main-yellow rounded-full animate-ping group-hover:bg-black" />
-                                    Terminer le contrat
+                                    Pari terminé
                                 </button>
                             )}
                         </div>
