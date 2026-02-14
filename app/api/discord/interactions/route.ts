@@ -157,14 +157,14 @@ export async function POST(req: Request) {
 
           return NextResponse.json({
             type: 7,
-            data: { content: `**Pari Accepté !** Bonne chance aux deux.`, components: [] }
+            data: { content: `**Pari Accepté !** Bonne chance.`, components: [] }
           });
         }
 
         if (action === "deny") {
           bet.status = "DECLINED";
           await kv.lset(`user:bets:${senderId}`, betIndex, JSON.stringify(bet));
-          return NextResponse.json({ type: 7, data: { content: "❌ Pari refusé.", components: [] } });
+          return NextResponse.json({ type: 7, data: { content: "Pari refusé.", components: [] } });
         }
       }
 
