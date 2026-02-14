@@ -17,41 +17,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, profile, account }) {
       const userId = profile?.id || user?.id;
-      if (!userId || !account?.access_token) return false;
+      if (!userId || !account?.access_token) {
+        console.error("SIGNIN_FAIL: missing userId or access token");
+        return false;
+      }
+
+      const TARGET_GUILD_ID = process.env.DISCORD_GUILD_ID;
+      if (!TARGET_GUILD_ID) {
+        console.warn("SIGNIN_WARN: DISCORD_GUILD_ID not set, allowing login");
+        return true; 
+      }
 
       try {
-        // --- DISCORD SERVER CHECK ---
         const res = await fetch("https://discord.com/api/users/@me/guilds", {
           headers: { Authorization: `Bearer ${account.access_token}` },
         });
 
-        if (!res.ok) return false;
-
-        const guilds = await res.json();
-        const TARGET_GUILD_ID = "YOUR_DISCORD_SERVER_ID_HERE"; // Put your Server ID here
-
-        const isMember = guilds.some((g: any) => g.id === TARGET_GUILD_ID);
-        
-        // If not in the server, reject login
-        if (!isMember) return false; 
-
-        // --- EXISTING KV LOGIC ---
-        const currentCredits = await kv.get(`user:credits:${userId}`);
-        if (currentCredits === null) {
-          await kv.set(`user:credits:${userId}`, 5000);
+        if (!res.ok) {
+          console.error("SIGNIN_FAIL: could not fetch guilds");
+          return false;
         }
 
-        await kv.set(`user:profile:${userId}`, {
-          id: userId,
-          name: user.name,
-          image: user.image,
-        });
+        const guilds = await res.json();
+        const isMember = guilds.some((g: any) => g.id === TARGET_GUILD_ID);
 
-        await kv.sadd("all_players", userId);
+        if (!isMember) {
+          console.warn(`SIGNIN_DENIED: user not in guild ${TARGET_GUILD_ID}`);
+          return false;
+        }
 
         return true;
       } catch (e) {
-        console.error("KV_SIGNIN_ERROR:", e);
+        console.error("SIGNIN_ERROR:", e);
         return false;
       }
     },

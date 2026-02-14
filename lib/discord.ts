@@ -30,7 +30,6 @@ export async function sendDiscordBetRequest({
   const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN?.trim();
   await assertBotToken(BOT_TOKEN);
 
-  // ✅ Idempotency guard
   const sentKey = `discord:sent:bet:${betId}`;
   if (await kv.get(sentKey)) {
     console.log(`[Discord] Bet DM already sent for ${betId}`);
@@ -81,7 +80,7 @@ export async function sendDiscordBetRequest({
     return { ok: false, reason: "DISCORD_ERROR" };
   }
 
-  // ✅ Mark as sent
+ 
   await kv.set(sentKey, true);
 
   return { ok: true };
@@ -128,7 +127,7 @@ export async function sendDiscordResolutionRequest({
     method: "POST",
     botToken: BOT_TOKEN!,
     body: JSON.stringify({
-      content: `🚨 **Demande de clôture de pari !**
+      content: `**Demande de clôture de pari !**
 
 **${initiatorName}** déclare que le gagnant des **${amount} CR** est <@${claimedWinnerId}>.
 
