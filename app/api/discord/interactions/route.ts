@@ -3,36 +3,36 @@ import { NextResponse } from "next/server";
 import { verifyKey } from "discord-interactions";
 
 export async function POST(req: Request) {
-    // 1. On récupère les headers de signature
-    const signature = req.headers.get("x-signature-ed25519");
-    const timestamp = req.headers.get("x-signature-timestamp");
+    // Discord headers are case-sensitive in some environments
+    const signature = req.headers.get("X-Signature-Ed25519") || req.headers.get("x-signature-ed25519");
+    const timestamp = req.headers.get("X-Signature-Timestamp") || req.headers.get("x-signature-timestamp");
 
-    // 2. On lit le body en TEXTE brut (indispensable pour la signature)
     const rawBody = await req.text();
 
-    // LOG DE DÉBOGAGE : Si tu ne vois pas ça, la requête n'arrive pas au code
-    console.log("--- REQUÊTE DISCORD REÇUE ---");
-    console.log("Body:", rawBody);
+    // Debugging the key length (Should be exactly 64)
+    console.log("Key Length:", process.env.DISCORD_PUBLIC_KEY?.length);
 
-    // 3. Vérification de la signature
     const isValidRequest = verifyKey(
         rawBody,
-        signature!,
-        timestamp!,
-        process.env.DISCORD_PUBLIC_KEY!
+        signature || "",
+        timestamp || "",
+        process.env.DISCORD_PUBLIC_KEY || ""
     );
 
     if (!isValidRequest) {
         console.error("❌ Signature invalide");
+        // Log the headers to see if they are actually arriving
+        console.log("Sig:", signature, "TS:", timestamp);
         return new Response("Invalid request signature", { status: 401 });
     }
 
-    // 4. On parse le JSON manuellement après la vérification
     const body = JSON.parse(rawBody);
-
-    // 5. Réponse au PING (obligatoire pour Discord)
     if (body.type === 1) {
-        return NextResponse.json({ type: 1 });
+        // Use a standard Response for the handshake to avoid Next.js overhead
+        return new Response(JSON.stringify({ type: 1 }), {
+            headers: { "Content-Type": "application/json" },
+            status: 200
+        });
     }
     try {
         if (body.type === 3) {
