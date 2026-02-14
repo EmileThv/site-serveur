@@ -53,6 +53,9 @@ export default function BettingInterface({ session }: { session: any }) {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [isSuccess, setIsSuccess] = useState(false); // NEW
+
+
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Load players
@@ -213,27 +216,27 @@ export default function BettingInterface({ session }: { session: any }) {
     };
 
     const drawCable = (start: Point, end: Point) => {
-    if (!start || !end) return "";
+        if (!start || !end) return "";
 
-    // The vertical distance between the two points
-    const deltaY = Math.abs(start.y - end.y);
-    // The horizontal distance
-    const deltaX = Math.abs(start.x - end.x);
-    
-    // Calculate a dynamic "sag" or tension
-    // If points are close, sag is small. If far, sag increases.
-    const sag = Math.min(deltaY, 100) + (deltaX * 0.2);
+        // The vertical distance between the two points
+        const deltaY = Math.abs(start.y - end.y);
+        // The horizontal distance
+        const deltaX = Math.abs(start.x - end.x);
 
-    // Control Point 1: Slightly below the start point
-    const cp1x = start.x;
-    const cp1y = start.y + sag;
+        // Calculate a dynamic "sag" or tension
+        // If points are close, sag is small. If far, sag increases.
+        const sag = Math.min(deltaY, 100) + (deltaX * 0.2);
 
-    // Control Point 2: Slightly below the end point
-    const cp2x = end.x;
-    const cp2y = end.y + sag;
+        // Control Point 1: Slightly below the start point
+        const cp1x = start.x;
+        const cp1y = start.y + sag;
 
-    return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${end.x} ${end.y}`;
-};
+        // Control Point 2: Slightly below the end point
+        const cp2x = end.x;
+        const cp2y = end.y + sag;
+
+        return `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${end.x} ${end.y}`;
+    };
 
 
     return (
@@ -509,44 +512,86 @@ export default function BettingInterface({ session }: { session: any }) {
                             </div>
 
                             {/* Boutons d'Action */}
+                            {/* Boutons d'Action */}
                             <div className="flex gap-4">
                                 <button
                                     onClick={() => {
                                         setShowConfirmation(false);
-                                        setConnections([]); // Reset les fils si décliné
+                                        setConnections([]); // Reset wires if declined
                                     }}
                                     className="flex-1 py-4 border border-white/10 hover:bg-white/5 transition-colors font-black text-[10px] uppercase tracking-[0.2em]"
                                 >
                                     DECLINE
                                 </button>
-                                <button
-                                    disabled={isSubmitting}
+
+                                {/* REPLACE THIS WHOLE CONFIRM BUTTON */}
+                                <motion.button
+                                    type="button"
+                                    whileTap={{ scale: isSubmitting ? 1 : 0.96 }}
+                                    animate={
+                                        isSuccess
+                                            ? { scale: [1, 1.06, 1], boxShadow: "0 0 25px rgba(242,200,12,0.45)" } // success pop
+                                            : { scale: 1 }
+                                    }
+                                    transition={{ duration: 0.25 }}
+                                    disabled={isSubmitting || isSuccess}
+                                    aria-busy={isSubmitting ? "true" : "false"}
                                     onClick={async () => {
                                         const conn = connections.find(c => c.to === "trans-in-b");
-                                        if (conn) {
-                                            setIsSubmitting(true); // Start loading
-                                            try {
-                                                // For your SELF-TEST: 
-                                                // You can temporarily change conn.from to "YOUR_DISCORD_ID" 
-                                                // to force it to DM you regardless of who you clicked.
-                                                await createBet(conn.from, betAmount, betTitle);
+                                        if (!conn) return;
 
+                                        setIsSubmitting(true);
+                                        try {
+                                            await createBet(conn.from, betAmount, betTitle);
+
+                                            // Success flash & short hold so the user SEES it
+                                            setIsSuccess(true);
+
+                                            // Optional: also change the label-out cable color briefly (kept simple here)
+                                            setTimeout(() => {
+                                                setIsSuccess(false);
                                                 setShowConfirmation(false);
                                                 setConnections([]);
                                                 setIsSubmitted(true);
-                                                setTimeout(() => setIsSubmitted(false), 3000);
-                                            } catch (err) {
-                                                console.error("Bet failed:", err);
-                                            } finally {
-                                                setIsSubmitting(false); // Stop loading
-                                            }
+                                                setTimeout(() => setIsSubmitted(false), 1500);
+                                            }, 1200);
+                                        } catch (err) {
+                                            console.error("Bet failed:", err);
+                                            // Optional: show an error toast / border-red flash
+                                        } finally {
+                                            setIsSubmitting(false);
                                         }
                                     }}
-                                    className="flex-1 py-4 bg-main-yellow text-black hover:bg-yellow-400 transition-colors font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(242,200,12,0.3)]"
+                                    className={[
+                                        "flex-1 py-4 rounded relative overflow-hidden",
+                                        "font-black text-[10px] uppercase tracking-[0.2em]",
+                                        "transition-colors",
+                                        isSuccess
+                                            ? "bg-green-400 text-black shadow-[0_0_24px_rgba(74,222,128,0.35)]"
+                                            : "bg-main-yellow text-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(242,200,12,0.3)]",
+                                        (isSubmitting || isSuccess) ? "opacity-90 cursor-not-allowed" : ""
+                                    ].join(" ")}
                                 >
-                                    CONFIRM
-                                </button>
+                                    <div className="flex items-center justify-center gap-2">
+                                        {isSubmitting && <Spinner size={14} color="#111" />}
+                                        <span>
+                                            {isSuccess ? "SENT" : isSubmitting ? "SENDING…" : "CONFIRM"}
+                                        </span>
+                                    </div>
+
+                                    {/* Subtle progress bar at the bottom during submit */}
+                                    {isSubmitting && (
+                                        <motion.div
+                                            layoutId="confirmProgressBar"
+                                            className="absolute left-0 bottom-0 h-0.5 bg-black/40"
+                                            initial={{ width: "0%" }}
+                                            animate={{ width: "100%" }}
+                                            transition={{ duration: 0.9, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+                                        />
+                                    )}
+                                </motion.button>
                             </div>
+
                         </motion.div>
                     </motion.div>
                 )}
@@ -576,4 +621,20 @@ function Jack({ id, onRegistered, onClick, active, activeColor }: {
             </div>
         </div>
     );
+}
+
+// Put this near the bottom of the file or extract to a small component file
+function Spinner({ size = 16, color = "#111" }: { size?: number; color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      className="animate-spin"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10" stroke={color} strokeOpacity="0.25" strokeWidth="4" fill="none" />
+      <path d="M22 12a10 10 0 0 0-10-10" stroke={color} strokeWidth="4" fill="none" />
+    </svg>
+  );
 }

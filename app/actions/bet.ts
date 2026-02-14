@@ -14,17 +14,16 @@ export async function createBet(receiverId: string, amount: number, title: strin
     // 1. On récupère les crédits (juste pour le log)
     const currentCredits = await kv.get<number>(`user:credits:${senderId}`) || 5000;
 
-    // --- MODE DÉMO : ON COMMENTE LA SÉCURITÉ ---
-    /*
+    
     if (currentCredits < amount) {
        throw new Error("INSUFFICIENT_CREDITS");
     }
-    */
+    
 
     // 3. On enregistre le pari dans KV pour l'historique
     // app/actions/bet.ts
     const betData = {
-      id: `demo_${Math.random().toString(36).substr(2, 9)}`,
+      id: `${Math.random().toString(36).substr(2, 9)}`,
       amount,
       title: title || "DEMO_BET",
       senderId,
