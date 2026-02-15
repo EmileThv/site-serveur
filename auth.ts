@@ -24,42 +24,51 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, profile, account }) {
       const userId = profile?.id || user?.id;
-      if (!userId || !account?.access_token) {
-        console.error("SIGNIN_FAIL: missing userId or access token");
-        return false;
-      }
+      if (!userId || !account?.access_token) return false;
 
       const TARGET_GUILD_ID = process.env.DISCORD_GUILD_ID;
-      if (!TARGET_GUILD_ID) {
-        console.warn("SIGNIN_WARN: DISCORD_GUILD_ID not set, allowing login");
-        return true;
-      }
 
       try {
+        // 1. Guild Check
         const res = await fetch("https://discord.com/api/users/@me/guilds", {
           headers: { Authorization: `Bearer ${account.access_token}` },
         });
-
-        if (!res.ok) {
-          console.error("SIGNIN_FAIL: could not fetch guilds");
-          return false;
-        }
+        if (!res.ok) return false;
 
         const guilds = await res.json();
         const isMember = guilds.some((g: any) => g.id === TARGET_GUILD_ID);
+        if (!isMember && TARGET_GUILD_ID) return false;
 
-        if (!isMember) {
-          console.warn(`SIGNIN_DENIED: user not in guild ${TARGET_GUILD_ID}`);
-          return false;
+        // 2. Key Definitions
+        const profileKey = `user:profile:${userId}`;
+        const creditsKey = `user:credits:${userId}`;
+
+        // 3. Check if this is the FIRST connection
+        const existingProfile = await kv.get(profileKey);
+
+        if (!existingProfile) {
+          // First time! Create the profile
+          const newUserProfile = {
+            id: userId,
+            name: profile?.global_name || profile?.username || user?.name,
+            image: user?.image || (profile as any)?.image_url,
+          };
+
+          // Set the profile AND the 5000 starting credits
+          await Promise.all([
+            kv.set(profileKey, newUserProfile),
+            kv.set(creditsKey, 5000)
+          ]);
+
+          console.log(`NEW_USER_CREATED: ${userId} initialized with 5000 credits.`);
+        } else {
+          // Optional: Update existing profile to keep Discord Name/Image in sync
+          await kv.set(profileKey, {
+            ...existingProfile,
+            name: profile?.global_name || profile?.username || user?.name,
+            image: user?.image || (profile as any)?.image_url,
+          });
         }
-
-        const userData = {
-          id: userId,
-          name: profile?.global_name || profile?.name || user?.name,
-          image: user?.image || profile?.image_url,
-        };
-
-        await kv.set(`user:${userId}`, userData);
 
         return true;
       } catch (e) {
