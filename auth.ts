@@ -53,6 +53,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return false;
         }
 
+        const userData = {
+          id: userId,
+          name: profile?.global_name || profile?.name || user?.name,
+          image: user?.image || profile?.image_url,
+        };
+
+        await kv.set(`user:${userId}`, userData);
+
         return true;
       } catch (e) {
         console.error("SIGNIN_ERROR:", e);
