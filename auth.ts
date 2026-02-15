@@ -37,7 +37,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const guilds = await res.json();
         const isMember = guilds.some((g: any) => g.id === TARGET_GUILD_ID);
-        if (!isMember && TARGET_GUILD_ID) return false;
+        // If the user is not a member of the required guild, redirect to a friendly page
+        if (!isMember && TARGET_GUILD_ID) return "/not-in-server";
 
         // 2. Key Definitions
         const profileKey = `user:profile:${userId}`;
@@ -57,7 +58,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           // Set the profile AND the 5000 starting credits
           await Promise.all([
             kv.set(profileKey, newUserProfile),
-            kv.set(creditsKey, 5000)
+            kv.set(creditsKey, 5000),
+            kv.sadd("all_players", userId),
           ]);
 
           console.log(`NEW_USER_CREATED: ${userId} initialized with 5000 credits.`);

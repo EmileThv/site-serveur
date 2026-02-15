@@ -5,6 +5,8 @@
     import { signIn } from "next-auth/react";
     import { createBet } from "@/app/actions/bet";
     import { useCredits } from "@/app/providers/CreditsProvider";
+    import Jack from "./betting/Jack";
+    import Spinner from "./betting/Spinner";
 
     // Types
     interface Point {
@@ -31,8 +33,8 @@
 
     function Module({ title, children }: { title: string; children: React.ReactNode }) {
         return (
-            <div className="border-2 border-white/10 rounded-lg bg-black/40 backdrop-blur-sm p-6 shadow-lg hover:border-white/20 transition-colors">
-                <div className="text-xs font-black text-white/60 uppercase tracking-widest mb-4 border-b border-white/5 pb-3">
+            <div className="border-2 border-white/10 rounded-lg bg-black/40 backdrop-blur-sm p-3 shadow-lg hover:border-white/20 transition-colors ">
+                <div className="text-[10px] font-black text-white/60 uppercase tracking-widest mb-3 border-b border-white/5 pb-2">
                     {title}
                 </div>
                 {children}
@@ -251,7 +253,7 @@
                     const rect = containerRef.current.getBoundingClientRect();
                     setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
                 }}
-                className="min-h-dvh h-screen bg-[#0a0a0a] text-white overflow-y-auto overflow-x-hidden relative font-mono p-4 md:p-12 select-none flex items-start justify-center"
+                className="min-h-dvh h-screen bg-[#0a0a0a] text-white overflow-hidden relative font-mono p-4 md:p-8 select-none flex items-start justify-center"
             >
                 {/* BIG DYNAMIC BACKGROUND TEXT */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
@@ -263,7 +265,7 @@
 
 
                 {/* SPACED GRID */}
-                <div className="flex flex-col xl:grid xl:grid-cols-4 gap-8 xl:gap-16 w-full max-w-375 z-20 relative py-10 items-start">
+                <div className="flex flex-col xl:grid xl:grid-cols-4 gap-4 xl:gap-8 w-full max-w-375 z-20 relative py-6 items-start">
 
                     {/* LEFT: POWER SOURCE */}
                     <div className="flex justify-center">
@@ -301,7 +303,7 @@
 
                     {/* CENTER: LOGIC MODULES */}
                     <div className="col-span-2 space-y-16">
-                        <div className="grid grid-cols-2 gap-12">
+                        <div className="grid grid-cols-2 gap-6">
                             <Module title="BET SELECTOR">
                                 <div className="flex flex-col items-center py-2 gap-6">
                                     <div className="flex flex-col items-center gap-1">
@@ -346,7 +348,7 @@
                                         value={betTitle}
                                         onChange={(e) => setBetTitle(e.target.value)}
                                     />
-                                    <div className="flex gap-12 w-full justify-center">
+                                    <div className="flex gap-6 w-full justify-center">
                                         <div className="flex flex-col items-center gap-1">
                                             <span className="text-[8px] font-black text-white/30 uppercase">Title_IN</span>
                                             <Jack id="label-in" onRegistered={collectPort} onClick={handleJackClick} active={activeCable?.from === "label-in"} />
@@ -361,7 +363,7 @@
                         </div>
 
                         <Module title="DISTRIBUTION NODES (CONNECTED_USERS)">
-                            <div className="grid grid-cols-5 gap-6 py-6 px-4">
+                            <div className="grid grid-cols-5 gap-3 py-4 px-4">
                                 {players
                                     .filter((p) => p.id !== session?.user?.id && p.name !== session?.user?.name)
                                     .map((player) => (
@@ -394,7 +396,7 @@
                     {/* RIGHT: EXECUTION */}
                     <div className="flex justify-center">
                         <Module title="FINAL BREAKER">
-                            <div className="flex flex-col items-center py-12 gap-10">
+                            <div className="flex flex-col items-center py-8 gap-6">
                                 <div className="flex flex-col items-center gap-1">
                                     <span className="text-[8px] font-black text-white/30 uppercase">Confirm_IN</span>
                                     <Jack id="exec-in" onRegistered={collectPort} onClick={handleJackClick} active={activeCable?.from === "exec-in"} />
@@ -599,41 +601,4 @@
         );
     }
 
-    function Jack({ id, onRegistered, onClick, active, activeColor }: {
-        id: string;
-        onRegistered: (id: string, el: HTMLDivElement | null) => void;
-        onClick: (id: string) => void;
-        active: boolean;
-        activeColor?: string;
-    }) {
-        return (
-            <div
-                ref={(el) => onRegistered(id, el)}
-                onClick={() => onClick(id)}
-                className={`w-12 h-12 rounded-full bg-[#0a0a0a] border-2 flex items-center justify-center cursor-pointer transition-all duration-300
-                    ${active ? '' : 'border-white/10 hover:border-white/30 hover:scale-105'}
-                `}
-                style={active ? { borderColor: activeColor || '#22c55e', boxShadow: `0 0 20px ${activeColor || '#22c55e'}` } : undefined}
-            >
-                <div className="w-5 h-5 rounded-full bg-[#151515] border border-white/5 shadow-inner flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-black" />
-                </div>
-            </div>
-        );
-    }
-
-    // Put this near the bottom of the file or extract to a small component file
-    function Spinner({ size = 16, color = "#111" }: { size?: number; color?: string }) {
-    return (
-        <svg
-        width={size}
-        height={size}
-        className="animate-spin"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        >
-        <circle cx="12" cy="12" r="10" stroke={color} strokeOpacity="0.25" strokeWidth="4" fill="none" />
-        <path d="M22 12a10 10 0 0 0-10-10" stroke={color} strokeWidth="4" fill="none" />
-        </svg>
-    );
-    }
+    // Jack and Spinner have been extracted to small modules in `components/betting/`

@@ -19,6 +19,28 @@ export async function createBet(receiverId: string, amount: number, title: strin
        throw new Error("INSUFFICIENT_CREDITS");
     }
     
+    // Prevent betting yourself
+    if (receiverId === senderId) {
+      throw new Error("CANNOT_BET_SELF");
+    }
+
+    // 2. Check that neither sender nor receiver is currently involved in any active/pending bets
+    const parseList = (arr: any[]) => arr.map((b) => (typeof b === "string" ? JSON.parse(b) : b));
+
+    const senderRaw = await kv.lrange<any>(`user:bets:${senderId}`, 0, -1);
+    const senderBets = parseList(senderRaw || []);
+    const senderHasActive = senderBets.some((b: any) => b?.status === "ACTIVE" || b?.status === "PENDING");
+    if (senderHasActive) {
+      throw new Error("SENDER_HAS_ACTIVE_BET");
+    }
+
+    const receiverRaw = await kv.lrange<any>(`user:bets:${receiverId}`, 0, -1);
+    const receiverBets = parseList(receiverRaw || []);
+    const receiverHasActive = receiverBets.some((b: any) => b?.status === "ACTIVE" || b?.status === "PENDING");
+    if (receiverHasActive) {
+      throw new Error("RECEIVER_HAS_ACTIVE_BET");
+    }
+    
 
     // 3. On enregistre le pari dans KV pour l'historique
     // app/actions/bet.ts
