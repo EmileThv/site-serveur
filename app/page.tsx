@@ -2,7 +2,7 @@
 import HeroBg from "@/components/HeroBg";
 import Leaderboard from "@/components/Leaderboard";
 import FilmCard from "@/components/FilmCard"; // Import here
-
+export const dynamic = "force-dynamic"
 export default function Home() {
   return (
     <main className="relative h-dvh w-screen bg-discord-black text-white overflow-hidden flex flex-col">

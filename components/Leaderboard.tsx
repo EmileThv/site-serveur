@@ -13,7 +13,7 @@ export default async function Leaderboard() {
           Classement
         </h3>
         <span className="text-xs uppercase tracking-widest text-main-green font-bold opacity-80">
-          Top 4
+          Podium
         </span>
       </div>
 
